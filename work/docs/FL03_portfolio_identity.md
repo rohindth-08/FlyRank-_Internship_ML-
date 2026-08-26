@@ -35,8 +35,8 @@ This document serves as the foundation for my ML portfolio's visual identity, st
 ## 3. The Identity Kit
 
 ### Fonts
-- **Heading Font:** `Inter` (Clean, modern, highly legible).
-- **Body Font:** `Roboto` (Neutral, highly readable at small sizes).
+- **Heading Font:** `Space Grotesk` (Technical, modern, data-driven).
+- **Body Font:** `Inter` (Neutral, highly readable at small sizes).
 
 ### Palette (Hex Codes)
 - **Background:** `#FAFAFA` (Warm near-white)
@@ -49,6 +49,10 @@ This document serves as the foundation for my ML portfolio's visual identity, st
 
 ### Style Note
 *Clean, restrained, data-focused. The UI is just a quiet frame; let the case study numbers and python screenshots be the loudest things on the page. Use generous whitespace.*
+
+### The One-Line Style Guide
+**Fonts:** Space Grotesk (Headings), Inter (Body). **Colors:** Text `#1A1A1A` on Background `#FAFAFA` with Accent `#2E7D32`. 
+*(Note on contrast: `#1A1A1A` on `#FAFAFA` is extremely high contrast and perfectly legible on a phone in sunlight. The `#2E7D32` green is dark enough to read easily as a link).*
 
 ---
 
