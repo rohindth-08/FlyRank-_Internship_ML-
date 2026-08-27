@@ -1,0 +1,9 @@
+{
+  "p50_baseline": 0.44,
+  "p50_model_grouped": 0.14,
+  "p50_model_naive": 0.68,
+  "auc_model_grouped": 0.4646952888834203,
+  "base_rate": 0.1819818409517846,
+  "n_rows": 76656,
+  "n_test": 1863
+}

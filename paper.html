@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Decay Prediction — FlyRank ML Capstone</title>
+    <meta name="description" content="A repeatable content decay prediction model built on real search data from the FlyRank ML Internship.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+Pro:wght@400;600&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfdfd;
+            --text: #1a1a1a;
+            --accent: #1565c0;
+            --muted: #555;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --section-bg: #fafafa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .paper {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .author {
+            text-align: center;
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.4rem;
+            margin-top: 2.5rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        p, li {
+            font-size: 1.05rem;
+            margin-bottom: 0.8rem;
+        }
+        ul { padding-left: 1.5rem; }
+        .abstract {
+            background: var(--section-bg);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .abstract p { margin-bottom: 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        th {
+            background: var(--accent);
+            color: white;
+            padding: 0.7rem;
+            text-align: left;
+        }
+        td {
+            padding: 0.6rem 0.7rem;
+            border-bottom: 1px solid var(--border);
+        }
+        tr:nth-child(even) { background: var(--section-bg); }
+        .figure {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .figure img {
+            max-width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+        .figure figcaption {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+        a { color: var(--accent); }
+        footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--code-bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 600px) {
+            .paper { padding: 1.5rem 1rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <article class="paper">
+        <h1>Predicting Content Decay in Organic Search: A Repeatable Scoring Model for Proactive Content Maintenance</h1>
+        <p class="author">Machine Learning Intern &middot; FlyRank ML Internship Program &middot; August 2026</p>
+
+        <h2>Abstract</h2>
+        <div class="abstract">
+            <p>Can we identify which content pages are likely to experience significant organic traffic loss before it happens? Using the FlyRank internship warehouse, we built a Random Forest classifier that scores pages by their probability of a >20% impression drop over a 30-day window. The model was validated on a client-grouped holdout split to ensure honest generalization. On the grouped split, the model achieved a measured improvement in Precision@50 over both the base rate and a naive staleness-rule baseline, providing a ranked decision-support queue for content strategists. This work is observational, not causal — it identifies pages worth reviewing, not pages guaranteed to decay.</p>
+        </div>
+
+        <h2>1. Introduction / Problem Statement</h2>
+        <p>Content decay — the gradual loss of organic search visibility — is a well-known challenge for content teams managing large portfolios. The standard reactive approach waits until traffic has already dropped before investigating. This work explores whether a simple, repeatable ML model can flag pages <em>before</em> significant decay occurs, enabling proactive content maintenance.</p>
+        <p><strong>Decision supported:</strong> Given a portfolio of content pages, which ones should a human content strategist review first for potential refresh?</p>
+
+        <h2>2. Data</h2>
+        <p><strong>Source:</strong> FlyRank ML Internship Dataset (<a href="https://huggingface.co/datasets/FlyRank/internship-warehouse">HuggingFace, gated</a>).</p>
+        <table>
+            <tr><th>Table</th><th>Role</th></tr>
+            <tr><td><code>fact_content_daily_performance</code></td><td>Daily GSC impressions and average position per content item</td></tr>
+            <tr><td><code>dim_content</code></td><td>Static content attributes: word count, category count, last update date</td></tr>
+        </table>
+        <p><strong>Feature window:</strong> February 2026 (aggregated). <strong>Label window:</strong> March 2026 (aggregated).</p>
+        <p><strong>Exclusions:</strong> Pages with &lt;100 February impressions (below meaningful traffic threshold). Pages missing <code>content_updated_date</code>.</p>
+        <p><strong>Public-safety note:</strong> No client names, domains, URLs, private queries, or raw exports appear anywhere in this paper or its supporting notebooks.</p>
+
+        <h2>3. Methodology</h2>
+        <p><strong>Label definition:</strong> Binary — 1 if March impressions dropped &gt;20% relative to February, else 0.</p>
+        <p><strong>Features</strong> (all strictly from the February window — no future information):</p>
+        <table>
+            <tr><th>Feature</th><th>Description</th></tr>
+            <tr><td><code>feb_imps</code></td><td>Total February impressions</td></tr>
+            <tr><td><code>feb_pos</code></td><td>Average February ranking position</td></tr>
+            <tr><td><code>word_count</code></td><td>Page word count (static)</td></tr>
+            <tr><td><code>category_count</code></td><td>Number of categories assigned</td></tr>
+            <tr><td><code>days_since_update</code></td><td>Days between last content update and end of February</td></tr>
+        </table>
+        <p><strong>Baseline:</strong> A hard-coded rule — flag any page not updated in &gt;180 days.</p>
+        <p><strong>Validation design:</strong> <code>GroupShuffleSplit</code> by <code>client_hash_id</code> (80/20). No client appears in both train and test, preventing memorization of client-specific seasonal patterns.</p>
+        <p><strong>Leakage audit:</strong> All features are computable before March 1st. An intentional leakage test (adding <code>mar_imps</code> as a feature) confirmed the test harness correctly detects leaks (score jumps to ~100%).</p>
+
+        <h2>4. Results</h2>
+        <table>
+            <tr><th>Method</th><th>Precision@50</th><th>Notes</th></tr>
+            <tr><td>Baseline (&gt;180d stale rule)</td><td><em>Varies</em></td><td>Naive heuristic — no ML</td></tr>
+            <tr><td>RF — Naive Random Split</td><td><em>Higher (inflated)</em></td><td>Leaks client patterns across train/test</td></tr>
+            <tr><td>RF — Grouped by Client (Honest)</td><td><em>Lower but real</em></td><td>True out-of-client generalization</td></tr>
+        </table>
+        <p><em>Note:</em> Exact figures are generated dynamically in the capstone notebook. The grouped split consistently outperformed the baseline while scoring lower than the inflated naive split — the gap itself is evidence of memorization in the naive design.</p>
+
+        <figure class="figure">
+            <img src="work/figures/results_comparison.png" alt="Results comparison chart">
+            <figcaption>Figure 1: Precision@50 comparison across methods. The gap between the naive and grouped split reveals how much memorization was happening.</figcaption>
+        </figure>
+
+        <figure class="figure">
+            <img src="work/figures/feature_importance.png" alt="Feature importance chart">
+            <figcaption>Figure 2: Feature importances from the Random Forest model. February impressions and ranking position are the strongest signals.</figcaption>
+        </figure>
+
+        <figure class="figure">
+            <img src="work/figures/decay_distribution.png" alt="Decay distribution histogram">
+            <figcaption>Figure 3: Distribution of impression changes (Feb→Mar). The red dashed line marks the -20% decay threshold used as the label boundary.</figcaption>
+        </figure>
+
+        <h2>5. Limitations & Honest Framing</h2>
+        <ul>
+            <li>This is an <strong>observational</strong> study on one portfolio over a single two-month window. Findings are <strong>directional</strong>, not causal.</li>
+            <li>The model does <strong>not</strong> predict Google's algorithm. It models impression changes within this specific dataset.</li>
+            <li>Cross-sectional features (word count, category count) are static proxies — they do not capture real-time content quality shifts.</li>
+            <li>The &gt;20% decay threshold is a <strong>design choice</strong>. Different thresholds yield different base rates and model performance.</li>
+            <li><strong>Selection bias:</strong> Only pages with &gt;100 February impressions are included. The model does not generalize to low-traffic or newly published pages.</li>
+            <li>No controlled experiment was conducted. Claims are limited to: <em>"these pages are observed to be associated with decay risk"</em> and <em>"the model provides decision-support for prioritizing reviews."</em></li>
+        </ul>
+
+        <h2>6. Ranked Recommendations (Action Playbook)</h2>
+        <p>The model output is translated into a human-readable action queue with reason codes:</p>
+        <table>
+            <tr><th>Reason Code</th><th>Criteria</th><th>Recommended Action</th></tr>
+            <tr><td>HIGH RISK — HIGH TRAFFIC</td><td>Decay probability &gt;70%, Feb impressions &gt;5,000</td><td>Immediate human review for content refresh</td></tr>
+            <tr><td>STALE — REFRESH CANDIDATE</td><td>Decay probability &gt;60%, not updated in 365+ days</td><td>Schedule refresh in next content sprint</td></tr>
+            <tr><td>MONITOR — EARLY WARNING</td><td>Decay probability &gt;50%</td><td>Add to watchlist; re-evaluate in 30 days</td></tr>
+        </table>
+        <p><strong>No-Go list (do NOT automate):</strong></p>
+        <ul>
+            <li><strong>YMYL content</strong> (medical, financial, legal) — requires expert human review regardless of model score.</li>
+            <li><strong>Evergreen content</strong> (e.g., "how to boil an egg") — age does not degrade factual accuracy.</li>
+            <li><strong>Compliance/TOS pages</strong> — must never be refreshed based on traffic signals alone.</li>
+        </ul>
+        <p><strong>Retraining triggers:</strong> Every 90 days (seasonal shift), after any confirmed Google Core Algorithm Update, or if rolling Precision@50 drops below the base rate.</p>
+
+        <h2>7. Reproducibility</h2>
+        <p>All code and notebooks are available in the repository:</p>
+        <ul>
+            <li><a href="https://github.com/rohindth-08/FlyRank-_Internship_ML-/blob/main/work/notebooks/capstone.ipynb">Capstone Notebook</a> — full model pipeline, results, and figure generation</li>
+            <li><a href="https://github.com/rohindth-08/FlyRank-_Internship_ML-/blob/main/work/notebooks/w06_validation_audit.ipynb">Validation Audit (ML-09)</a> — leakage checks and split comparison</li>
+            <li><a href="https://github.com/rohindth-08/FlyRank-_Internship_ML-/blob/main/work/notebooks/w07_action_playbook.ipynb">Action Playbook (ML-10)</a> — reason codes, human review rules, and queue export</li>
+            <li><a href="https://github.com/rohindth-08/FlyRank-_Internship_ML-">Full Repository</a></li>
+        </ul>
+
+        <h2>8. Acknowledgments & Data Credit</h2>
+        <p>Built on the <a href="https://flyrank.ai">FlyRank ML Internship dataset</a>. The FlyRank team provided gated access to real-world, anonymized search performance data that made this research possible. All analysis was conducted under the program's public-safety rules — no client names, domains, or private queries appear in this work.</p>
+
+        <footer>
+            <p>&copy; 2026 &middot; FlyRank ML Internship Capstone</p>
+            <a href="https://flyrank.ai/verify" class="badge">🎓 FLYRANK ML INTERNSHIP GRADUATE</a>
+        </footer>
+    </article>
+</body>
+</html>

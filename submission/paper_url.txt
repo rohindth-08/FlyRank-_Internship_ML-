@@ -1,1 +1,1 @@
-PASTE-YOUR-DEPLOYED-PAPER-URL-HERE
+https://rohindth-08.github.io/FlyRank-_Internship_ML-/paper.html
