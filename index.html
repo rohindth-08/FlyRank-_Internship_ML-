@@ -12,32 +12,73 @@
             background-color: #FAFAFA;
             color: #1A1A1A;
             font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 4rem 2rem;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
         }
-        h1 {
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+        h1, h2 {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        h1 {
+            font-size: 2.5rem;
         }
         p {
-            font-size: 1.2rem;
-            max-width: 600px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #333;
         }
         .accent {
             color: #2E7D32;
         }
+        .links {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .links a {
+            color: #2E7D32;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .links a:hover {
+            border-color: #2E7D32;
+        }
+        .card {
+            background: white;
+            border: 1px solid #EAEAEA;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body>
-    <div>
+    <div class="container">
         <h1>Machine Learning Portfolio</h1>
-        <p>I turn messy search data into <span class="accent">predictive content strategies.</span></p>
-        <p style="font-size: 0.9rem; margin-top: 2rem; color: #666;">(Building in progress...)</p>
+        <p>I am a Machine Learning Intern at FlyRank. I turn messy search data into <span class="accent">predictive content strategies.</span> Currently, I am building automated data pipelines and ranking models to predict content decay before it happens.</p>
+        
+        <div class="links">
+            <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            <a href="https://github.com/rohindth-08" target="_blank">GitHub</a>
+            <a href="#" target="_blank">Download CV</a>
+            <a href="https://calendly.com" target="_blank">Book a Chat</a>
+        </div>
+
+        <div class="card">
+            <h2>ML Capstone Work</h2>
+            <p>Coming Soon! This space is reserved for my final FlyRank Capstone Project and completion badge.</p>
+        </div>
     </div>
 </body>
 </html>
