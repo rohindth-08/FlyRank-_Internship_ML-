@@ -28,11 +28,24 @@ Whenever I complete a new ML project, I will use my preserved AI context to draf
 
 ## 2. Execution: The Next Real Piece of Work
 
-The first true test of this system will be translating my academic ML Capstone into a portfolio-ready business case study.
+The first true test of this system will be translating my academic ML Capstone into a portfolio-ready business case study. 
 
 **Target Case Study:** `"The Content Decay Predictor"`
-- **Goal:** Take the deployed research paper and distill it down into a highly visual, 3-beat case study for the "Recent Work" section of my personal website (`index.html`).
-- **Focus:** Highlight the difference between a "leaky" naive split and an "honest" grouped split to demonstrate my understanding of rigorous ML validation to hiring managers.
+
+Here is exactly how I will execute the **Launch, Demo, and Story** for this specific project:
+
+### The Launch Plan
+- **Where it will go:** A dedicated, highly visual section on the homepage of my portfolio (`index.html`), under the "Recent Work" header.
+- **The Asset:** I will link directly to the deployed `paper.html` research paper, which acts as the deep-dive technical artifact backing up my claims.
+
+### The Demo Plan
+- **The Video:** I will record a 3-minute screen capture using OBS Studio.
+- **The Flow:** I will not use slides. Instead, I will open the live Jupyter Notebook (`capstone.ipynb`), run the cells live, and show the model generating the ranked action queue from raw data.
+- **The Honesty Check:** During the demo, I will explicitly mention one limitation on camera (e.g., "The model currently relies on cross-sectional static features like word count, which do not capture real-time content quality"). This proves credibility over hype.
+
+### The Story Plan
+- **The Medium:** A "Build-in-Public" post on LinkedIn and the FlyRank showcase thread.
+- **The Narrative:** Instead of saying "Look at my accuracy score," the story will focus on *how* I validated the model. I will write about the "leakage epiphany" I had in Week 3, explaining why a grouped client split is infinitely more valuable than a naive random split, framing myself as a rigorous, data-aware engineer.
 
 ---
 
